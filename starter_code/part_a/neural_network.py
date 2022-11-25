@@ -8,6 +8,7 @@ import torch.utils.data
 
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 
 def load_data(base_path="../data"):
@@ -70,7 +71,8 @@ class AutoEncoder(nn.Module):
         # Implement the function as described in the docstring.             #
         # Use sigmoid activations for f and g.                              #
         #####################################################################
-        out = inputs
+        encode = torch.sigmoid(self.g(inputs))
+        out = torch.sigmoid(self.h(encode))
         #####################################################################
         #                       END OF YOUR CODE                            #
         #####################################################################
@@ -90,8 +92,8 @@ def train(model, lr, lamb, train_data, zero_train_data, valid_data, num_epoch):
     :param num_epoch: int
     :return: None
     """
-    # TODO: Add a regularizer to the cost function. 
-    
+    # TODO: Add a regularizer to the cost function.
+
     # Tell PyTorch you are training the model.
     model.train()
 
@@ -99,6 +101,9 @@ def train(model, lr, lamb, train_data, zero_train_data, valid_data, num_epoch):
     optimizer = optim.SGD(model.parameters(), lr=lr)
     num_student = train_data.shape[0]
 
+    train_lst = []
+    valid_lst = []
+    best_valid_acc = 0
     for epoch in range(0, num_epoch):
         train_loss = 0.
 
@@ -113,15 +118,21 @@ def train(model, lr, lamb, train_data, zero_train_data, valid_data, num_epoch):
             nan_mask = np.isnan(train_data[user_id].unsqueeze(0).numpy())
             target[0][nan_mask] = output[0][nan_mask]
 
-            loss = torch.sum((output - target) ** 2.)
+            # loss = torch.sum((output - target) ** 2.)
+            loss = torch.sum((output - target) ** 2.) + model.get_weight_norm() * lamb * 0.5
             loss.backward()
 
             train_loss += loss.item()
             optimizer.step()
 
         valid_acc = evaluate(model, zero_train_data, valid_data)
+        if valid_acc > best_valid_acc:
+            best_valid_acc = valid_acc
+        train_lst.append(train_loss)
+        valid_lst.append(valid_acc)
         print("Epoch: {} \tTraining Cost: {:.6f}\t "
-              "Valid Acc: {}".format(epoch, train_loss, valid_acc))
+              "Valid Acc: {} \tBest Valid Acc: {:.6f}".format(epoch, train_loss, valid_acc, best_valid_acc))
+    return train_lst, valid_lst
     #####################################################################
     #                       END OF YOUR CODE                            #
     #####################################################################
@@ -154,6 +165,10 @@ def evaluate(model, train_data, valid_data):
 
 
 def main():
+
+    np.random.seed(0)
+    torch.manual_seed(0)
+
     zero_train_matrix, train_matrix, valid_data, test_data = load_data()
 
     #####################################################################
@@ -161,17 +176,38 @@ def main():
     # Try out 5 different k and select the best k using the             #
     # validation set.                                                   #
     #####################################################################
-    # Set model hyperparameters.
-    k = None
-    model = None
+    num_question = train_matrix.shape[1]
 
-    # Set optimization hyperparameters.
-    lr = None
-    num_epoch = None
+    # k= [10, 50, 100, 200, 500]
+    # best model hyperparameters.
+    k = 50
+    model = AutoEncoder(num_question, k)
+    lr = 0.008
     lamb = None
 
-    train(model, lr, lamb, train_matrix, zero_train_matrix,
-          valid_data, num_epoch)
+    # plot and report how the training and validation objectives changes as a
+    # function of epoch
+    # num_epoch = 100
+    # train_lst, valid_lst = train(model, lr, lamb, train_matrix,
+    #                              zero_train_matrix, valid_data, num_epoch)
+    #
+    # plt.plot(list(range(num_epoch)), train_lst, label="training lost")
+    # plt.xlabel("epoch_num")
+    # plt.ylabel("training loss")
+    # plt.savefig("./training_lost")
+
+    num_epoch = 56
+    # evaluate on the test set
+    # train(model, lr, lamb, train_matrix, zero_train_matrix, valid_data, num_epoch)
+    # test_acc = evaluate(model, zero_train_matrix, test_data)
+    # print("test_acc: ", test_acc)
+
+    # add regularization penalty
+    # lambs = [0.001, 0.01, 0.1, 1]
+    lamb = 0.001
+    train(model, lr, lamb, train_matrix, zero_train_matrix, valid_data, num_epoch)
+    test_acc = evaluate(model, zero_train_matrix, test_data)
+    print("test_acc: ", test_acc)
     #####################################################################
     #                       END OF YOUR CODE                            #
     #####################################################################
