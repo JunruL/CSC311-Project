@@ -204,7 +204,7 @@ def main():
 
     # add regularization penalty
     # lambs = [0.001, 0.01, 0.1, 1]
-    lamb = 0.001
+    lamb = 0.01
     train(model, lr, lamb, train_matrix, zero_train_matrix, valid_data, num_epoch)
     test_acc = evaluate(model, zero_train_matrix, test_data)
     print("test_acc: ", test_acc)
