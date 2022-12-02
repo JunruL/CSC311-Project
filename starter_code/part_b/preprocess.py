@@ -61,5 +61,17 @@ def load_subject_meta(root_dir="/data"):
     path = os.path.join(root_dir, "subject_meta.csv")
 
 
-def load_question_meta(root_dir="/data"):
+def load_question_meta(root_dir="/Users/lin/Desktop/CSC311/CSC311-Project/starter_code/data"):
     path = os.path.join(root_dir, "question_meta.csv")
+    if not os.path.exists(path):
+        raise Exception("The specified path {} does not exist.".format(path))
+
+    df = pd.read_csv(path)
+    df["subject_id"] = df["subject_id"].apply(lambda x: ast.literal_eval(x))
+
+    data = {
+        "question_id": list(df["question_id"]),
+        "subject_id": list(df["subject_id"]),
+    }
+
+    return data
