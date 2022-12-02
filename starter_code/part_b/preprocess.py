@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import csv
 import os
+import ast
 
 
 def load_student_meta(root_dir="../data"):
