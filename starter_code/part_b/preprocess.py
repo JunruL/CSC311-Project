@@ -5,7 +5,7 @@ import csv
 import os
 
 
-def load_student_meta(root_dir="/Users/lin/Desktop/CSC311/CSC311-Project/starter_code/data"):
+def load_student_meta(root_dir="../data"):
     path = os.path.join(root_dir, "student_meta.csv")
     if not os.path.exists(path):
         raise Exception("The specified path {} does not exist.".format(path))
@@ -57,11 +57,11 @@ def get_student_meta():
     return student_data_processed
 
 
-def load_subject_meta(root_dir="/data"):
+def load_subject_meta(root_dir="../data"):
     path = os.path.join(root_dir, "subject_meta.csv")
 
 
-def load_question_meta(root_dir="/Users/lin/Desktop/CSC311/CSC311-Project/starter_code/data"):
+def load_question_meta(root_dir="../data"):
     path = os.path.join(root_dir, "question_meta.csv")
     if not os.path.exists(path):
         raise Exception("The specified path {} does not exist.".format(path))

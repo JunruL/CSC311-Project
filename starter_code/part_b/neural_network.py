@@ -136,7 +136,7 @@ def train(model, lr, lamb, student_meta, train_data, zero_train_data, valid_data
     model.train()
 
     # Define optimizers and loss function.
-    optimizer = optim.SGD(model.parameters(), lr=lr)
+    optimizer = optim.Adam(model.parameters(), lr=lr)
     num_student = train_data.shape[0]
 
     train_lst = []
@@ -216,7 +216,7 @@ def main():
 
     k = 50
     model = AutoEncoder(num_question, k)
-    lr = 0.008
+    lr = 0.00005
 
     # plot and report how the training and validation objectives changes as a
     # function of epoch
@@ -229,7 +229,7 @@ def main():
     # plt.ylabel("training loss")
     # plt.savefig("./training_lost")
 
-    num_epoch = 22
+    num_epoch = 77
     # evaluate on the test set
     # train(model, lr, lamb, train_matrix, zero_train_matrix, valid_data, num_epoch)
     # test_acc = evaluate(model, zero_train_matrix, test_data)
