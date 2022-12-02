@@ -126,12 +126,13 @@ def train(model, lr, lamb, train_data, zero_train_data, valid_data, num_epoch):
             optimizer.step()
 
         valid_acc = evaluate(model, zero_train_data, valid_data)
+        valid_loss = calculate_validation_loss(model, zero_train_data, valid_data)
         if valid_acc > best_valid_acc:
             best_valid_acc = valid_acc
         train_lst.append(train_loss)
-        valid_lst.append(valid_acc)
+        valid_lst.append(valid_loss)
         print("Epoch: {} \tTraining Cost: {:.6f}\t "
-              "Valid Acc: {} \tBest Valid Acc: {:.6f}".format(epoch, train_loss, valid_acc, best_valid_acc))
+              "Valid Acc: {} \tValidation Loss: {:.6f} \tBest Valid Acc: {:.6f}".format(epoch, train_loss, valid_acc, valid_loss, best_valid_acc))
     return train_lst, valid_lst
     #####################################################################
     #                       END OF YOUR CODE                            #
@@ -164,6 +165,29 @@ def evaluate(model, train_data, valid_data):
     return correct / float(total)
 
 
+def calculate_validation_loss(model, train_data, valid_data):
+    """ Calculate the validation loss.
+
+    :param model: Module
+    :param train_data: 2D FloatTensor
+    :param valid_data: A dictionary {user_id: list,
+    question_id: list, is_correct: list}
+    :return: float
+    """
+    # Tell PyTorch you are evaluating the model.
+    model.eval()
+    loss = 0
+
+    for i, u in enumerate(valid_data["user_id"]):
+        inputs = Variable(train_data[u]).unsqueeze(0)
+        output = model(inputs)
+
+        guess = output[0][valid_data["question_id"][i]].item()
+        loss += (guess - valid_data["is_correct"][i]) ** 2
+
+    return loss
+
+
 def main():
 
     np.random.seed(0)
@@ -183,7 +207,7 @@ def main():
     k = 50
     model = AutoEncoder(num_question, k)
     lr = 0.008
-    lamb = None
+    lamb = 0
 
     # plot and report how the training and validation objectives changes as a
     # function of epoch
@@ -191,12 +215,19 @@ def main():
     # train_lst, valid_lst = train(model, lr, lamb, train_matrix,
     #                              zero_train_matrix, valid_data, num_epoch)
     #
-    # plt.plot(list(range(num_epoch)), train_lst, label="training lost")
+    # plt.figure(1)
+    # plt.plot(list(range(num_epoch)), train_lst)
     # plt.xlabel("epoch_num")
     # plt.ylabel("training loss")
     # plt.savefig("./training_lost")
+    #
+    # plt.figure(2)
+    # plt.plot(list(range(num_epoch)), valid_lst)
+    # plt.xlabel("epoch_num")
+    # plt.ylabel("validation loss")
+    # plt.savefig("./validation_lost")
 
-    num_epoch = 56
+    num_epoch = 57
     # evaluate on the test set
     # train(model, lr, lamb, train_matrix, zero_train_matrix, valid_data, num_epoch)
     # test_acc = evaluate(model, zero_train_matrix, test_data)
@@ -204,10 +235,11 @@ def main():
 
     # add regularization penalty
     # lambs = [0.001, 0.01, 0.1, 1]
-    lamb = 0.01
-    train(model, lr, lamb, train_matrix, zero_train_matrix, valid_data, num_epoch)
-    test_acc = evaluate(model, zero_train_matrix, test_data)
-    print("test_acc: ", test_acc)
+    # lamb = 0.1
+    # num_epoch = 118
+    # train(model, lr, lamb, train_matrix, zero_train_matrix, valid_data, num_epoch)
+    # test_acc = evaluate(model, zero_train_matrix, test_data)
+    # print("test_acc: ", test_acc)
     #####################################################################
     #                       END OF YOUR CODE                            #
     #####################################################################
