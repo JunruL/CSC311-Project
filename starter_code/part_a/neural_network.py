@@ -219,13 +219,13 @@ def main():
     # plt.plot(list(range(num_epoch)), train_lst)
     # plt.xlabel("epoch_num")
     # plt.ylabel("training loss")
-    # plt.savefig("./training_lost")
+    # plt.savefig("./training_loss")
     #
     # plt.figure(2)
     # plt.plot(list(range(num_epoch)), valid_lst)
     # plt.xlabel("epoch_num")
     # plt.ylabel("validation loss")
-    # plt.savefig("./validation_lost")
+    # plt.savefig("./validation_loss")
 
     num_epoch = 57
     # evaluate on the test set
