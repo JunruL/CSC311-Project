@@ -76,3 +76,21 @@ def load_question_meta(root_dir="../data"):
     }
 
     return data
+
+
+def get_question_meta():
+    data = load_question_meta()
+    unique = list(set([l[1] for l in data["subject_id"]]))
+    subject_lst = [0 for _ in range(len(unique))]
+    encoded_data = {
+        "question_id": data["question_id"],
+        "subject_id": [],
+    }
+    for i in range(len(data["question_id"])):
+        encoded_lst = subject_lst
+        for j in range(len(subject_lst)):
+            if data["subject_id"][i][1] == subject_lst[j]:
+                # encoded_lst[j] = 1
+                encoded_data["subject_id"][i] = j
+        
+    return encoded_data
