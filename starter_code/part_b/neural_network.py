@@ -39,7 +39,7 @@ def load_data(base_path="../data"):
 
 
 class AutoEncoder(nn.Module):
-    def __init__(self, num_question, k=100):
+    def __init__(self, num_question):
         """ Initialize a class AutoEncoder.
 
         :param num_question: int
@@ -50,26 +50,24 @@ class AutoEncoder(nn.Module):
         # Define linear functions.
 
         # ---------- structure 1 --------------------
-        # self.g1 = nn.Linear(num_question, 512)
-        # self.g2 = nn.Linear(512, 128)
-        # self.g3 = nn.Linear(128, 32)
-        # self.h3 = nn.Linear(32 + 2, 128)
-        # self.h2 = nn.Linear(128, 512)
-        # self.h1 = nn.Linear(512, num_question)
-
-        # ---------- structure 2 --------------------
-        self.g1 = nn.Linear(num_question, 256)
-        self.g2 = nn.Linear(256, 32)
-        self.h2 = nn.Linear(32, 256)
-        self.h1 = nn.Linear(256, num_question)
+        self.g1 = nn.Linear(num_question, 512)
+        self.g2 = nn.Linear(512, 128)
+        self.g3 = nn.Linear(128, 32)
+        self.h3 = nn.Linear(32 + 2, 128)
+        self.h2 = nn.Linear(128, 512)
+        self.h1 = nn.Linear(512, num_question)
 
     def get_weight_norm(self):
         """ Return ||W^1||^2 + ||W^2||^2.
 
         :return: float
         """
-        g_w_norm = torch.norm(self.g1.weight, 2) ** 2 + torch.norm(self.g2.weight, 2) ** 2
-        h_w_norm = torch.norm(self.h1.weight, 2) ** 2 + torch.norm(self.h2.weight, 2) ** 2
+        g_w_norm = torch.norm(self.g1.weight, 2) ** 2 +\
+                   torch.norm(self.g2.weight, 2) ** 2 +\
+                   torch.norm(self.g3.weight, 2) ** 2
+        h_w_norm = torch.norm(self.h1.weight, 2) ** 2 +\
+                   torch.norm(self.h2.weight, 2) ** 2 +\
+                   torch.norm(self.h3.weight, 2) ** 2
         return g_w_norm + h_w_norm
 
     def forward(self, inputs, user_info):
@@ -100,17 +98,21 @@ class AutoEncoder(nn.Module):
         # x = self.h1(x)
         # out = torch.sigmoid(x)
 
-        # ---------- structure 2 --------------------
         x = self.g1(inputs)
         x = F.relu(x)
         x = self.g2(x)
-        x = torch.sigmoid(x)
+        x = nn.Tanh()(x)
+        x = self.g3(x)
+        x = nn.Sigmoid()(x)
 
-        x = self.h2(x)
-        x = F.relu(x)
-        x = self.h1(x)
-        out = torch.sigmoid(x)
+        z = torch.cat((x, user_info), dim=1)
 
+        y = self.h3(z)
+        y = nn.Tanh()(y)
+        y = self.h2(y)
+        y = F.relu(y)
+        y = self.h1(y)
+        out = torch.sigmoid(y)
         #####################################################################
         #                       END OF YOUR CODE                            #
         #####################################################################
@@ -214,10 +216,9 @@ def main():
 
     num_question = train_matrix.shape[1]
 
-    k = 50
-    model = AutoEncoder(num_question, k)
-    lr = 0.00005
-    num_epoch = 77
+    model = AutoEncoder(num_question)
+    lr = 0.00001
+    num_epoch = 169
 
     lamb = 0.01
     train(model, lr, lamb, student_meta, train_matrix, zero_train_matrix, valid_data, num_epoch)
