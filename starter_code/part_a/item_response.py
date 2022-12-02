@@ -176,7 +176,7 @@ def main():
     plt.plot(np.sort(theta4), j1, label="Question 1")
     plt.plot(np.sort(theta4), j2, label="Question 2")
     plt.plot(np.sort(theta4), j3, label="Question 3")
-    plt.title("Probability of Correct Response as a function of Theta given a Question j")
+    plt.title("Probability of Correct Response as a Function of Theta given a Question j")
     plt.ylabel("probability of the correct response")
     plt.xlabel("theta given a question j")
     plt.legend()

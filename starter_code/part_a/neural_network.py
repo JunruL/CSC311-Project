@@ -211,21 +211,23 @@ def main():
 
     # plot and report how the training and validation objectives changes as a
     # function of epoch
-    # num_epoch = 100
-    # train_lst, valid_lst = train(model, lr, lamb, train_matrix,
-    #                              zero_train_matrix, valid_data, num_epoch)
-    #
-    # plt.figure(1)
-    # plt.plot(list(range(num_epoch)), train_lst)
-    # plt.xlabel("epoch_num")
-    # plt.ylabel("training loss")
-    # plt.savefig("./training_loss")
-    #
-    # plt.figure(2)
-    # plt.plot(list(range(num_epoch)), valid_lst)
-    # plt.xlabel("epoch_num")
-    # plt.ylabel("validation loss")
-    # plt.savefig("./validation_loss")
+    num_epoch = 100
+    train_lst, valid_lst = train(model, lr, lamb, train_matrix,
+                                 zero_train_matrix, valid_data, num_epoch)
+
+    plt.figure(1)
+    plt.plot(list(range(num_epoch)), train_lst)
+    plt.xlabel("epoch_num")
+    plt.ylabel("training loss")
+    plt.title("The Training Loss Changes as a Function of Epoch")
+    plt.savefig("./q3_d_train.pdf")
+
+    plt.figure(2)
+    plt.plot(list(range(num_epoch)), valid_lst)
+    plt.xlabel("epoch_num")
+    plt.ylabel("validation loss")
+    plt.title("The Validation Loss Changes as a Function of Epoch")
+    plt.savefig("./q3_d.valid.pdf")
 
     num_epoch = 57
     # evaluate on the test set
