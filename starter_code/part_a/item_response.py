@@ -94,8 +94,8 @@ def irt(data, val_data, lr, iterations):
     :return: (theta, beta, val_acc_lst)
     """
     # TODO: Initialize theta and beta.
-    theta = np.zeros(len(data["user_id"]) + 1)
-    beta = np.zeros(len(data["question_id"]) + 1)
+    theta = np.zeros(542)
+    beta = np.zeros(1774)
 
     val_acc_lst = []
     train_lld_lst = []
@@ -104,8 +104,8 @@ def irt(data, val_data, lr, iterations):
     for i in range(iterations):
         neg_lld_train = neg_log_likelihood(data, theta=theta, beta=beta)
         neg_lld_val = neg_log_likelihood(val_data, theta=theta, beta=beta)
-        train_lld_lst.append(-neg_lld_train)
-        val_lld_lst.append(-neg_lld_val)
+        train_lld_lst.append(neg_lld_train)
+        val_lld_lst.append(neg_lld_val)
         score = evaluate(data=val_data, theta=theta, beta=beta)
         val_acc_lst.append(score)
         print("NLLK: {} \t Score: {}".format(neg_lld_train, score))
@@ -141,11 +141,6 @@ def main():
     val_data = load_valid_csv("../data")
     test_data = load_public_test_csv("../data")
 
-    #####################################################################
-    # TODO:                                                             #
-    # Tune learning rate and number of iterations. With the implemented #
-    # code, report the validation and test accuracy.                    #
-    #####################################################################
     # part (b)
     theta1, beta1, val_acc_lst1, train_lld_lst1, val_lld_lst1 = irt(train_data, val_data, 0.01, 50)
     theta2, beta2, val_acc_lst2, train_lld_lst2, val_lld_lst2 = irt(train_data, val_data, 0.02, 25)
@@ -161,24 +156,18 @@ def main():
     plt.plot(train_lld_lst4, label="training")
     plt.plot(val_lld_lst4, label="validation")
     plt.xlabel("number of iterations")
-    plt.ylabel("log-likelihood")
-    plt.title("Training and Validation Log-likelihoods as a Function of Iterations")
+    plt.ylabel("negative log-likelihood")
+    plt.title("Training and Validation Negative Log-likelihoods as a Function of Iterations")
     plt.legend()
-    plt.show()
+    plt.savefig("./q2_b.pdf")
 
     # part (c)
     val_acc = evaluate(val_data, theta4, beta4)
     print("Validation Accuracy:", val_acc)
     test_acc = evaluate(test_data, theta4, beta4)
     print("Test Accuracy:", test_acc)
-    #####################################################################
-    #                       END OF YOUR CODE                            #
-    #####################################################################
 
-    #####################################################################
-    # TODO:                                                             #
-    # Implement part (d)                                                #
-    #####################################################################
+    # part (d)
     j1 = sigmoid(np.sort(theta4) - beta4[0])
     j2 = sigmoid(np.sort(theta4) - beta4[1])
     j3 = sigmoid(np.sort(theta4) - beta4[2])
@@ -191,7 +180,7 @@ def main():
     plt.ylabel("probability of the correct response")
     plt.xlabel("theta given a question j")
     plt.legend()
-    plt.show()
+    plt.savefig("./q2_d.pdf")
     #####################################################################
     #                       END OF YOUR CODE                            #
     #####################################################################

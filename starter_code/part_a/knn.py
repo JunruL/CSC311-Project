@@ -89,14 +89,14 @@ def main():
     plt.xlabel("k")
     plt.ylabel("validation accuracy")
     plt.title("Validation Accuracy of kNN Imputed by User")
-    plt.show()
+    plt.savefig("./q1_a.pdf")
 
     plt.figure(2)
     plt.plot(k_list, valid_acc_by_item)
     plt.xlabel("k")
     plt.ylabel("validation accuracy")
     plt.title("Validation Accuracy of kNN Imputed by Item")
-    plt.show()
+    plt.savefig("./q1_c.pdf")
 
 
 if __name__ == "__main__":
