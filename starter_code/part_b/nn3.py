@@ -11,7 +11,7 @@ import torch.utils.data
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
-from preprocess import get_student_meta, get_question_meta
+from preprocess import get_question_matrix
 
 
 def load_data(base_path="../data"):
@@ -42,7 +42,7 @@ def load_data(base_path="../data"):
 
 
 class AutoEncoder(nn.Module):
-    def __init__(self, num_question):
+    def __init__(self, num_student):
         """ Initialize a class AutoEncoder.
 
         :param num_question: int
@@ -50,15 +50,10 @@ class AutoEncoder(nn.Module):
         """
         super(AutoEncoder, self).__init__()
 
-        # Define linear functions.
-
-        # ---------- structure 1 --------------------
-        self.g1 = nn.Linear(num_question, 512)
-        self.g2 = nn.Linear(512, 128)
-        self.g3 = nn.Linear(128, 32)
-        self.h3 = nn.Linear(32 + 2, 128)
-        self.h2 = nn.Linear(128, 512)
-        self.h1 = nn.Linear(512, num_question)
+        self.g1 = nn.Linear(num_student, 1024)
+        self.g2 = nn.Linear(1024, 256)
+        self.h2 = nn.Linear(256 + 388, 1024)
+        self.h1 = nn.Linear(1024, num_student)
 
     def get_weight_norm(self):
         """ Return ||W^1||^2 + ||W^2||^2.
@@ -66,63 +61,33 @@ class AutoEncoder(nn.Module):
         :return: float
         """
         g_w_norm = torch.norm(self.g1.weight, 2) ** 2 +\
-                   torch.norm(self.g2.weight, 2) ** 2 +\
-                   torch.norm(self.g3.weight, 2) ** 2
+                   torch.norm(self.g2.weight, 2) ** 2
         h_w_norm = torch.norm(self.h1.weight, 2) ** 2 +\
-                   torch.norm(self.h2.weight, 2) ** 2 +\
-                   torch.norm(self.h3.weight, 2) ** 2
+                   torch.norm(self.h2.weight, 2) ** 2
         return g_w_norm + h_w_norm
 
-    def forward(self, inputs, user_info):
+    def forward(self, inputs, question_info):
         """ Return a forward pass given inputs.
 
         :param inputs: user vector.
         :return: user vector.
         """
-        #####################################################################
-        # TODO:                                                             #
-        # Implement the function as described in the docstring.             #
-        # Use sigmoid activations for f and g.                              #
-        #####################################################################
-        # ---------- structure 1 --------------------
-        # x = self.g1(inputs)
-        # x = F.relu(x)
-        # x = self.g2(x)
-        # x = F.relu(x)
-        # x = self.g3(x)
-        # x = torch.sigmoid(x)
-        #
-        # x = torch.cat((x, user_info), dim=1)
-        #
-        # x = self.h3(x)
-        # x = F.relu(x)
-        # x = self.h2(x)
-        # x = F.relu(x)
-        # x = self.h1(x)
-        # out = torch.sigmoid(x)
-
         x = self.g1(inputs)
         x = F.relu(x)
         x = self.g2(x)
-        x = nn.Tanh()(x)
-        x = self.g3(x)
         x = nn.Sigmoid()(x)
 
-        z = torch.cat((x, user_info), dim=1)
+        z = torch.cat((x, question_info), dim=1)
 
-        y = self.h3(z)
-        y = nn.Tanh()(y)
-        y = self.h2(y)
+        y = self.h2(z)
         y = F.relu(y)
         y = self.h1(y)
         out = torch.sigmoid(y)
-        #####################################################################
-        #                       END OF YOUR CODE                            #
-        #####################################################################
+
         return out
 
 
-def train(model, lr, lamb, student_meta, subject_meta, train_data, zero_train_data, valid_data, num_epoch):
+def train(model, lr, lamb, question_meta, train_data, zero_train_data, valid_data, num_epoch):
     """ Train the neural network, where the objective also includes
     a regularizer.
 
@@ -137,7 +102,6 @@ def train(model, lr, lamb, student_meta, subject_meta, train_data, zero_train_da
     """
     device = (torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu'))
     model = model.to(device=device)
-    subject = torch.from_numpy(subject_meta).to(device=device)
 
     # Tell PyTorch you are training the model.
     model.train()
@@ -145,6 +109,8 @@ def train(model, lr, lamb, student_meta, subject_meta, train_data, zero_train_da
     # Define optimizers and loss function.
     optimizer = optim.Adam(model.parameters(), lr=lr)
     num_student = train_data.shape[0]
+    num_question = train_data.shape[1]
+    num_subject = len(question_meta)
 
     train_lst = []
     valid_lst = []
@@ -152,17 +118,16 @@ def train(model, lr, lamb, student_meta, subject_meta, train_data, zero_train_da
     for epoch in range(0, num_epoch):
         train_loss = 0.
 
-        for user_id in range(num_student):
-            inputs = Variable(zero_train_data[user_id]).unsqueeze(0).to(device=device)
-            inputs += subject
-            user_info = torch.tensor([student_meta[user_id][0], student_meta[user_id][1]]).reshape(1, 2).to(device=device)
+        for q_id in range(num_question):
+            inputs = Variable(zero_train_data[:, q_id]).unsqueeze(0).to(device=device)
+            q_info = question_meta[:, q_id].reshape(1, num_subject).to(device=device)
             target = inputs.clone()
 
             optimizer.zero_grad()
-            output = model(inputs, user_info)
+            output = model(inputs, q_info)
 
             # Mask the target to only compute the gradient of valid entries.
-            nan_mask = np.isnan(train_data[user_id].unsqueeze(0).numpy())
+            nan_mask = np.isnan(train_data[:, q_id].unsqueeze(0).numpy())
             target[0][nan_mask] = output[0][nan_mask]
 
             # loss = torch.sum((output - target) ** 2.)
@@ -172,7 +137,7 @@ def train(model, lr, lamb, student_meta, subject_meta, train_data, zero_train_da
             train_loss += loss.item()
             optimizer.step()
 
-        valid_acc = evaluate(model, student_meta, subject_meta, zero_train_data, valid_data)
+        valid_acc = evaluate(model, question_meta, zero_train_data, valid_data)
         if valid_acc > best_valid_acc:
             best_valid_acc = valid_acc
         train_lst.append(train_loss)
@@ -180,13 +145,14 @@ def train(model, lr, lamb, student_meta, subject_meta, train_data, zero_train_da
         print("Epoch: {} \tTraining Cost: {:.6f}\t "
               "Valid Acc: {} \tBest Valid Acc: {:.6f}".format(epoch + 1, train_loss, valid_acc,
                                                               best_valid_acc))
-    return train_lst, valid_lst
+        sys.stdout.flush()
+    return best_valid_acc
     #####################################################################
     #                       END OF YOUR CODE                            #
     #####################################################################
 
 
-def evaluate(model, student_meta, subject_meta, train_data, valid_data):
+def evaluate(model, question_meta, train_data, valid_data):
     """ Evaluate the valid_data on the current model.
 
     :param model: Module
@@ -197,20 +163,20 @@ def evaluate(model, student_meta, subject_meta, train_data, valid_data):
     """
     device = (torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu'))
     model = model.to(device=device)
-    subject_meta = torch.from_numpy(subject_meta).to(device=device)
     # Tell PyTorch you are evaluating the model.
     model.eval()
+
+    num_subject = len(question_meta)
 
     total = 0
     correct = 0
 
-    for i, u in enumerate(valid_data["user_id"]):
-        inputs = Variable(train_data[u]).unsqueeze(0).to(device=device)
-        inputs += subject_meta
-        user_info = torch.tensor([student_meta[u][0], student_meta[u][1]]).reshape(1, 2).to(device=device)
-        output = model(inputs, user_info)
+    for i, u in enumerate(valid_data["question_id"]):
+        inputs = Variable(train_data[:, u]).unsqueeze(0).to(device=device)
+        q_info = question_meta[:, u].reshape(1, num_subject).to(device=device)
+        output = model(inputs, q_info)
 
-        guess = output[0][valid_data["question_id"][i]].item() >= 0.5
+        guess = output[0][valid_data["user_id"][i]].item() >= 0.5
         if guess == valid_data["is_correct"][i]:
             correct += 1
         total += 1
@@ -218,40 +184,38 @@ def evaluate(model, student_meta, subject_meta, train_data, valid_data):
 
 
 def main():
+    print(f'nn3.py, Model=1024,256,256+388')
+
     # read the beta value from the command line
     parser = argparse.ArgumentParser()
-    parser.add_argument("-beta", "--beta", type=float, help="value of beta for the subejct meta data")
+    parser.add_argument("-lr", "--lr", type=float, help="learning rate")
     args = parser.parse_args()
-    beta = args.beta
-
-    print(f'nn2.py, Model=512,128,32+2, beta={beta}')
+    lr = args.lr
+    print(f'Tuning process for lr={lr}')
 
     np.random.seed(0)
     torch.manual_seed(0)
 
     zero_train_matrix, train_matrix, valid_data, test_data = load_data()
-    student_meta = get_student_meta()
+    question_matrix = torch.FloatTensor(get_question_matrix())
 
-    num_question = train_matrix.shape[1]
+    num_student = train_matrix.shape[0]
 
-    # beta_lst = [0, 0.1, 0.5, 1, 2, 5, 10, 100]
-    lr_lst = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1]
-    lamb_lst = [0, 0.001, 0.01, 0.1]
-    num_epoch = 200
+    # lr_lst = [1e-5, 1e-4, 1e-3]
+    lamb_lst = [0, 0.0001, 0.001]
+    num_epoch = 110
     result_lst = []
 
-    for lr in lr_lst:
-        for lamb in lamb_lst:
-            print('----------------------------------------------------------')
-            print(f'beta={beta}, lr={lr}, lamb={lamb}, num_epoch={num_epoch}')
-            model = AutoEncoder(num_question)
-            subject_meta = get_question_meta(beta)
-            best_valid_acc = train(model, lr, lamb, student_meta, subject_meta, train_matrix, zero_train_matrix, valid_data, num_epoch)
-            test_acc = evaluate(model, student_meta, subject_meta, zero_train_matrix, test_data)
-            print(f'beta={beta}, lr={lr}, lamb={lamb}, num_epoch={num_epoch}, test_acc={test_acc}')
-            print('----------------------------------------------------------')
-            sys.stdout.flush()
-            result_lst.append(f'beta={beta}, lr={lr}, lamb={lamb}, best_valid_acc={best_valid_acc}')
+    for lamb in lamb_lst:
+        print('----------------------------------------------------------')
+        print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}')
+        model = AutoEncoder(num_student)
+        best_valid_acc = train(model, lr, lamb, question_matrix, train_matrix, zero_train_matrix, valid_data, num_epoch)
+        test_acc = evaluate(model, question_matrix, zero_train_matrix, test_data)
+        print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}, test_acc={test_acc}')
+        print('----------------------------------------------------------')
+        sys.stdout.flush()
+        result_lst.append(f'lr={lr}, lamb={lamb}, best_valid_acc={best_valid_acc}')
     
     for result in result_lst:
         print(result)

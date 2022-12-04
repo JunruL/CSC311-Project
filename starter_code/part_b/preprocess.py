@@ -58,6 +58,27 @@ def get_student_meta():
     return student_data_processed
 
 
+def get_student_vectors():
+    student_data_raw = load_student_meta()
+    gender_vector = np.zeros((388, 1))
+    age_vector = np.zeros((388, 1))
+    for i in range(388):
+        gender = student_data_raw["gender"][i]
+        gender /= 2.0
+        premium_pupil = student_data_raw["premium_pupil"]
+        year = student_data_raw["date_of_birth"][i][0:4]
+        if year != '':
+            age = 2022 - int(year)
+        else:
+            age = 15
+        age /= 20.0
+        
+        gender_vector[i, 0] = gender
+        age_vector[i, 0] = age
+    
+    return gender_vector, age_vector
+    
+
 def load_subject_meta(root_dir="../data"):
     path = os.path.join(root_dir, "subject_meta.csv")
 
@@ -78,19 +99,27 @@ def load_question_meta(root_dir="../data"):
     return data
 
 
-def get_question_meta():
+def get_question_meta(beta):
     data = load_question_meta()
     unique = list(set([l[1] for l in data["subject_id"]]))
     subject_lst = [0 for _ in range(len(unique))]
-    encoded_data = {
-        "question_id": data["question_id"],
-        "subject_id": [],
-    }
-    for i in range(len(data["question_id"])):
+    id_lst = data["question_id"]
+    encoded_data = np.zeros(len(id_lst))
+    for i in range(len(id_lst)):
         encoded_lst = subject_lst
         for j in range(len(subject_lst)):
-            if data["subject_id"][i][1] == subject_lst[j]:
-                # encoded_lst[j] = 1
-                encoded_data["subject_id"][i] = j
-        
+            if data["subject_id"][i][1] == unique[j]:
+                question_id = id_lst[i]
+                encoded_data[question_id] = (j+1) * beta
     return encoded_data
+
+
+def get_question_matrix():
+    data = load_question_meta()
+
+    q_matrix = np.zeros((388, 1774))
+    for i, q_id in enumerate(data["question_id"]):
+        for s_id in data["subject_id"]:
+            q_matrix[s_id, q_id] = 1
+    
+    return q_matrix

@@ -56,6 +56,7 @@ class AutoEncoder(nn.Module):
         self.h3 = nn.Linear(32 + 2, 128)
         self.h2 = nn.Linear(128, 512)
         self.h1 = nn.Linear(512, num_question)
+        
 
     def get_weight_norm(self):
         """ Return ||W^1||^2 + ||W^2||^2.
@@ -174,7 +175,7 @@ def train(model, lr, lamb, student_meta, train_data, zero_train_data, valid_data
         print("Epoch: {} \tTraining Cost: {:.6f}\t "
               "Valid Acc: {} \tBest Valid Acc: {:.6f}".format(epoch + 1, train_loss, valid_acc,
                                                               best_valid_acc))
-    return train_lst, valid_lst
+    return best_valid_acc
     #####################################################################
     #                       END OF YOUR CODE                            #
     #####################################################################
