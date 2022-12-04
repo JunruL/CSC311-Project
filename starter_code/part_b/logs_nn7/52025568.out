@@ -1,0 +1,20 @@
+nn7.py, same as nn4.py, but no question info
+Tuning process for lr=2e-05
+----------------------------------------------------------
+lr=2e-05, lamb=0, num_epoch=36
+Epoch: 1 	Training Cost: 13431.893746	 Valid Acc: 0.6577758961332204 	Best Valid Acc: 0.657776
+Epoch: 2 	Training Cost: 11816.115119	 Valid Acc: 0.6754163138583121 	Best Valid Acc: 0.675416
+Epoch: 3 	Training Cost: 11518.069484	 Valid Acc: 0.6761219305673158 	Best Valid Acc: 0.676122
+Epoch: 4 	Training Cost: 11424.582429	 Valid Acc: 0.6816257408975445 	Best Valid Acc: 0.681626
+Epoch: 5 	Training Cost: 11374.530952	 Valid Acc: 0.6837425910245555 	Best Valid Acc: 0.683743
+Epoch: 6 	Training Cost: 11336.279762	 Valid Acc: 0.6848715777589613 	Best Valid Acc: 0.684872
+Epoch: 7 	Training Cost: 11295.079620	 Valid Acc: 0.682895850973751 	Best Valid Acc: 0.684872
+Epoch: 8 	Training Cost: 11238.234500	 Valid Acc: 0.6817668642393452 	Best Valid Acc: 0.684872
+Epoch: 9 	Training Cost: 11156.244675	 Valid Acc: 0.6850127011007621 	Best Valid Acc: 0.685013
+Epoch: 10 	Training Cost: 11060.890148	 Valid Acc: 0.6855771944679651 	Best Valid Acc: 0.685577
+Epoch: 11 	Training Cost: 10969.811353	 Valid Acc: 0.6865650578605701 	Best Valid Acc: 0.686565
+Epoch: 12 	Training Cost: 10874.977713	 Valid Acc: 0.6936212249506069 	Best Valid Acc: 0.693621
+Epoch: 13 	Training Cost: 10762.155899	 Valid Acc: 0.6963025684448207 	Best Valid Acc: 0.696303
+Epoch: 14 	Training Cost: 10626.548261	 Valid Acc: 0.7009596387242449 	Best Valid Acc: 0.700960
+Epoch: 15 	Training Cost: 10486.549862	 Valid Acc: 0.7044877222692634 	Best Valid Acc: 0.704488
+Epoch: 16 	Training Cost: 10365.582214	 Valid Acc: 0.7047699689528648 	Best Valid Acc: 0.704770

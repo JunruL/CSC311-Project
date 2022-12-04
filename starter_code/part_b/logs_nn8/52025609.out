@@ -1,0 +1,17 @@
+nn8.py, two encoders + one decoder
+Tuning process for lr=2e-05
+----------------------------------------------------------
+lr=2e-05, lamb=0, num_epoch=41
+Epoch: 1 	Training Cost: 13153.876932	 Valid Acc: 0.674428450465707 	Best Valid Acc: 0.674428
+Epoch: 2 	Training Cost: 11674.685745	 Valid Acc: 0.6775331639853232 	Best Valid Acc: 0.677533
+Epoch: 3 	Training Cost: 11481.911632	 Valid Acc: 0.6817668642393452 	Best Valid Acc: 0.681767
+Epoch: 4 	Training Cost: 11429.487950	 Valid Acc: 0.683460344340954 	Best Valid Acc: 0.683460
+Epoch: 5 	Training Cost: 11403.179971	 Valid Acc: 0.6844482077335591 	Best Valid Acc: 0.684448
+Epoch: 6 	Training Cost: 11382.653585	 Valid Acc: 0.6848715777589613 	Best Valid Acc: 0.684872
+Epoch: 7 	Training Cost: 11358.771657	 Valid Acc: 0.6855771944679651 	Best Valid Acc: 0.685577
+Epoch: 8 	Training Cost: 11321.246455	 Valid Acc: 0.6844482077335591 	Best Valid Acc: 0.685577
+Epoch: 9 	Training Cost: 11248.400843	 Valid Acc: 0.6833192209991532 	Best Valid Acc: 0.685577
+Epoch: 10 	Training Cost: 11123.608670	 Valid Acc: 0.6869884278859724 	Best Valid Acc: 0.686988
+Epoch: 11 	Training Cost: 10976.187651	 Valid Acc: 0.6909398814563928 	Best Valid Acc: 0.690940
+Epoch: 12 	Training Cost: 10826.373911	 Valid Acc: 0.6972904318374259 	Best Valid Acc: 0.697290
+Epoch: 13 	Training Cost: 10675.552220	 Valid Acc: 0.7005362686988428 	Best Valid Acc: 0.700536

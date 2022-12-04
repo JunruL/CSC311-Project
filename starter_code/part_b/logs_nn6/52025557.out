@@ -1,0 +1,17 @@
+nn6.py, two encoders + one decoder (map to high dimension first)
+Tuning process for lr=1e-05
+----------------------------------------------------------
+lr=1e-05, lamb=0, num_epoch=77
+Epoch: 1 	Training Cost: 13826.097793	 Valid Acc: 0.627293254304262 	Best Valid Acc: 0.627293
+Epoch: 2 	Training Cost: 12728.528344	 Valid Acc: 0.6587637595258256 	Best Valid Acc: 0.658764
+Epoch: 3 	Training Cost: 11962.942199	 Valid Acc: 0.6742873271239063 	Best Valid Acc: 0.674287
+Epoch: 4 	Training Cost: 11667.698791	 Valid Acc: 0.679226644086932 	Best Valid Acc: 0.679227
+Epoch: 5 	Training Cost: 11531.648776	 Valid Acc: 0.6827547276319503 	Best Valid Acc: 0.682755
+Epoch: 6 	Training Cost: 11452.521931	 Valid Acc: 0.6831780976573525 	Best Valid Acc: 0.683178
+Epoch: 7 	Training Cost: 11400.335278	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.683884
+Epoch: 8 	Training Cost: 11362.610206	 Valid Acc: 0.6850127011007621 	Best Valid Acc: 0.685013
+Epoch: 9 	Training Cost: 11332.862944	 Valid Acc: 0.6850127011007621 	Best Valid Acc: 0.685013
+Epoch: 10 	Training Cost: 11305.972212	 Valid Acc: 0.6851538244425628 	Best Valid Acc: 0.685154
+Epoch: 11 	Training Cost: 11278.500847	 Valid Acc: 0.6854360711261642 	Best Valid Acc: 0.685436
+Epoch: 12 	Training Cost: 11246.927656	 Valid Acc: 0.6854360711261642 	Best Valid Acc: 0.685436
+Epoch: 13 	Training Cost: 11208.383773	 Valid Acc: 0.6874117979113745 	Best Valid Acc: 0.687412
