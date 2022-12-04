@@ -52,8 +52,13 @@ class AutoEncoder(nn.Module):
 
         self.g1 = nn.Linear(num_student, 256)
         self.g2 = nn.Linear(256, 128)
-        self.g3 = nn.Linear(128, 64)
-        self.h3 = nn.Linear(64, 128)
+        self.g3 = nn.Linear(128, 32)
+
+        self.s1 = nn.Linear(num_student * 2, 256)
+        self.s2 = nn.Linear(256, 128)
+        self.s3 = nn.Linear(128, 32)
+
+        self.h3 = nn.Linear(32+32, 128)
         self.h2 = nn.Linear(128, 256)
         self.h1 = nn.Linear(256, num_student)
 
@@ -65,23 +70,35 @@ class AutoEncoder(nn.Module):
         g_w_norm = torch.norm(self.g1.weight, 2) ** 2 +\
                    torch.norm(self.g2.weight, 2) ** 2 +\
                    torch.norm(self.g3.weight, 2) ** 2
+        s_w_norm = torch.norm(self.s1.weight, 2) ** 2 +\
+                   torch.norm(self.s2.weight, 2) ** 2 +\
+                   torch.norm(self.s3.weight, 2) ** 2
         h_w_norm = torch.norm(self.h1.weight, 2) ** 2 +\
                    torch.norm(self.h2.weight, 2) ** 2 +\
                    torch.norm(self.h3.weight, 2) ** 2
-        return g_w_norm + h_w_norm
+        return g_w_norm + s_w_norm + h_w_norm
 
-    def forward(self, inputs, question_info):
+    def forward(self, inputs, s_info):
         """ Return a forward pass given inputs.
 
         :param inputs: user vector.
         :return: user vector.
         """
-        x = self.g1(inputs)
-        x = F.relu(x)
-        x = self.g2(x)
-        x = nn.Tanh()(x)
-        x = self.g3(x)
-        x = nn.Sigmoid()(x)
+        x1 = self.g1(inputs)
+        x1 = F.relu(x1)
+        x1 = self.g2(x1)
+        x1 = nn.Tanh()(x1)
+        x1 = self.g3(x1)
+        x1 = nn.Sigmoid()(x1)
+
+        x2 = self.s1(s_info)
+        x2 = F.relu(x2)
+        x2 = self.s2(x2)
+        x2 = nn.Tanh()(x2)
+        x2 = self.s3(x2)
+        x2 = nn.Sigmoid()(x2)
+
+        x = torch.cat((x1, x2), dim=1)
 
         y = self.h3(x)
         y = nn.Tanh()(y)
@@ -93,7 +110,7 @@ class AutoEncoder(nn.Module):
         return out
 
 
-def train(model, lr, lamb, gender_vector, age_vector, train_data, zero_train_data, valid_data, num_epoch):
+def train(model, lr, lamb, student_info, train_data, zero_train_data, valid_data, num_epoch):
     """ Train the neural network, where the objective also includes
     a regularizer.
 
@@ -125,11 +142,11 @@ def train(model, lr, lamb, gender_vector, age_vector, train_data, zero_train_dat
 
         for q_id in range(num_question):
             inputs = Variable(zero_train_data[:, q_id]).unsqueeze(0).to(device=device)
-            q_info = question_meta[:, q_id].reshape(1, num_subject).to(device=device)
+            # student_info = gender_vector.reshape(1, num_student).to(device=device)
             target = inputs.clone()
 
             optimizer.zero_grad()
-            output = model(inputs, q_info)
+            output = model(inputs, student_info)
 
             # Mask the target to only compute the gradient of valid entries.
             nan_mask = np.isnan(train_data[:, q_id].unsqueeze(0).numpy())
@@ -142,7 +159,7 @@ def train(model, lr, lamb, gender_vector, age_vector, train_data, zero_train_dat
             train_loss += loss.item()
             optimizer.step()
 
-        valid_acc = evaluate(model, question_meta, zero_train_data, valid_data)
+        valid_acc = evaluate(model, student_info, zero_train_data, valid_data)
         if valid_acc > best_valid_acc:
             best_valid_acc = valid_acc
         train_lst.append(train_loss)
@@ -157,7 +174,7 @@ def train(model, lr, lamb, gender_vector, age_vector, train_data, zero_train_dat
     #####################################################################
 
 
-def evaluate(model, question_meta, train_data, valid_data):
+def evaluate(model, student_info, train_data, valid_data):
     """ Evaluate the valid_data on the current model.
 
     :param model: Module
@@ -171,15 +188,15 @@ def evaluate(model, question_meta, train_data, valid_data):
     # Tell PyTorch you are evaluating the model.
     model.eval()
 
-    num_subject = len(question_meta)
+    num_student = train_data.shape[0]
 
     total = 0
     correct = 0
 
     for i, u in enumerate(valid_data["question_id"]):
         inputs = Variable(train_data[:, u]).unsqueeze(0).to(device=device)
-        q_info = question_meta[:, u].reshape(1, num_subject).to(device=device)
-        output = model(inputs, q_info)
+        # student_info = gender_vector.reshape(1, num_student).to(device=device)
+        output = model(inputs, student_info)
 
         guess = output[0][valid_data["user_id"][i]].item() >= 0.5
         if guess == valid_data["is_correct"][i]:
@@ -203,20 +220,27 @@ def main():
 
     zero_train_matrix, train_matrix, valid_data, test_data = load_data()
     gender_vector, age_vector = get_student_vectors()
+    gender_vector = torch.FloatTensor(gender_vector)
+    age_vector = torch.FloatTensor(age_vector)
+    num_student = len(age_vector)
+    device = (torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu'))
+    gender = gender_vector.reshape(1, num_student).to(device=device)
+    age = age_vector.reshape(1, num_student).to(device=device)
+    student_info = torch.cat((gender, age), dim=1)
 
     num_student = train_matrix.shape[0]
 
     # lr_lst = [1e-5, 1e-4, 1e-3]
-    lamb_lst = [0]
-    num_epoch = 36
+    lamb_lst = [0, 0.00001, 0.0001, 0.001]
+    num_epoch = 50
     result_lst = []
 
     for lamb in lamb_lst:
         print('----------------------------------------------------------')
         print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}')
         model = AutoEncoder(num_student)
-        best_valid_acc = train(model, lr, lamb, gender_vector, age_vector, train_matrix, zero_train_matrix, valid_data, num_epoch)
-        test_acc = evaluate(model, gender_vector, age_vector, zero_train_matrix, test_data)
+        best_valid_acc = train(model, lr, lamb, student_info, train_matrix, zero_train_matrix, valid_data, num_epoch)
+        test_acc = evaluate(model, student_info, zero_train_matrix, test_data)
         print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}, test_acc={test_acc}')
         print('----------------------------------------------------------')
         result_lst.append(f'lr={lr}, lamb={lamb}, best_valid_acc={best_valid_acc}')

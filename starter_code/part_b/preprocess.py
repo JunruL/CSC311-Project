@@ -60,9 +60,9 @@ def get_student_meta():
 
 def get_student_vectors():
     student_data_raw = load_student_meta()
-    gender_vector = np.zeros((388, 1))
-    age_vector = np.zeros((388, 1))
-    for i in range(388):
+    gender_vector = np.zeros((542, 1))
+    age_vector = np.zeros((542, 1))
+    for i in range(542):
         gender = student_data_raw["gender"][i]
         gender /= 2.0
         premium_pupil = student_data_raw["premium_pupil"]

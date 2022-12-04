@@ -208,19 +208,18 @@ def main():
     num_student = train_matrix.shape[0]
 
     # lr_lst = [1e-5, 1e-4, 1e-3]
-    lamb_lst = [0, 0.0001, 0.001]
-    num_epoch = 36
+    lamb = 0.001
+    num_epoch = 45
     result_lst = []
 
-    for lamb in lamb_lst:
-        print('----------------------------------------------------------')
-        print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}')
-        model = AutoEncoder(num_student)
-        best_valid_acc = train(model, lr, lamb, question_matrix, train_matrix, zero_train_matrix, valid_data, num_epoch)
-        test_acc = evaluate(model, question_matrix, zero_train_matrix, test_data)
-        print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}, test_acc={test_acc}')
-        print('----------------------------------------------------------')
-        result_lst.append(f'lr={lr}, lamb={lamb}, best_valid_acc={best_valid_acc}')
+    print('----------------------------------------------------------')
+    print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}')
+    model = AutoEncoder(num_student)
+    best_valid_acc = train(model, lr, lamb, question_matrix, train_matrix, zero_train_matrix, valid_data, num_epoch)
+    test_acc = evaluate(model, question_matrix, zero_train_matrix, test_data)
+    print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}, test_acc={test_acc}')
+    print('----------------------------------------------------------')
+    result_lst.append(f'lr={lr}, lamb={lamb}, best_valid_acc={best_valid_acc}')
     
     for result in result_lst:
         print(result)
