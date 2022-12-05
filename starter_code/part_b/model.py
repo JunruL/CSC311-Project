@@ -230,14 +230,14 @@ def main():
     lamb = args.lamb
     num_epoch = args.num_epoch
 
-    num_student = train_matrix.shape[0]
-
     # load data and students info vectors
     zero_train_matrix, train_matrix, valid_data, test_data = load_data()
     gender_vector, age_vector = get_student_vectors()
     device = (torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu'))
-    gender_vector = gender_vector.reshape(1, num_student).to(device=device)
-    age_vector = age_vector.reshape(1, num_student).to(device=device)
+
+    num_student = train_matrix.shape[0]
+    gender_vector = torch.FloatTensor(gender_vector).reshape(1, num_student).to(device=device)
+    age_vector = torch.FloatTensor(age_vector).reshape(1, num_student).to(device=device)
 
     # train and test the model
     print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}')
