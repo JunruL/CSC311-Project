@@ -132,8 +132,9 @@ def train(model, lr, lamb, train_data, zero_train_data, valid_data, num_epoch):
         train_lst.append(train_loss)
         valid_lst.append(valid_loss)
         print("Epoch: {} \tTraining Cost: {:.6f}\t "
-              "Valid Acc: {} \tValidation Loss: {:.6f} \tBest Valid Acc: {:.6f}".format(epoch, train_loss, valid_acc, valid_loss, best_valid_acc))
-    return train_lst, valid_lst
+              "Valid Acc: {} \tValidation Loss: {:.6f} \tBest Valid Acc: {:.6f}".format(epoch+1, train_loss, valid_acc, valid_loss, best_valid_acc))
+    # return train_lst, valid_lst
+    return best_valid_acc
     #####################################################################
     #                       END OF YOUR CODE                            #
     #####################################################################

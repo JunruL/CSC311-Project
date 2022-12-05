@@ -1,49 +1,27 @@
 """Implement bagging ensemble to improve the stability and accuracy of the base models."""
 
 from neural_network import *
+import argparse
 
 
-def load_and_bootstrap(base_path="../data", m=3):
+def bootstrap(zero_train_matrix, train_matrix, m=3):
     """
     Load the data in PyTorch Tensor.
     Bootstrap <m> new datasets from the loaded training data with the same length.
-
-    :param base_path: the base path to load the data
-    :param m: number of bootstrapped datasets
-
-    :return: (bootstrapped_zero_matrix_lst, bootstrapped_train_matrix_lst, valid_data, test_data)
-        WHERE:
-        bootstrapped_zero_matrix_lst: a list of 2D sparse matrix where missing entries are
-                                      filled with 0.
-        bootstrapped_train_matrix_lst: a list of 2D sparse matrix
-        valid_data: A dictionary {user_id: list, user_id: list, is_correct: list}
-        test_data: A dictionary {user_id: list, user_id: list, is_correct: list}
     """
-    train_matrix = load_train_sparse(base_path).toarray()
-    valid_data = load_valid_csv(base_path)
-    test_data = load_public_test_csv(base_path)
-
     bootstrapped_train_matrix_lst = []
     bootstrapped_zero_matrix_lst = []
     n = len(train_matrix)
 
     for _ in range(m):
         # randomly sample n indices in range(0, n)
-        ids = torch.randint(0, n, (n,))
-        # get the bootstrapped_train_matrix using sampled indices
-        bootstrapped_train_matrix = train_matrix[ids]
+        ids = np.random.randint(low=0, high=n, size=n)
 
-        bootstrapped_zero_matrix = bootstrapped_train_matrix.copy()
-        # Fill in the missing entries to 0.
-        bootstrapped_zero_matrix[np.isnan(bootstrapped_train_matrix)] = 0
-        # Change to Float Tensor for PyTorch.
-        bootstrapped_zero_matrix = torch.FloatTensor(bootstrapped_zero_matrix)
-        bootstrapped_train_matrix = torch.FloatTensor(bootstrapped_train_matrix)
+        # bootstrap train_matrix and zero_train_matrix using sampled indices
+        bootstrapped_train_matrix_lst.append(train_matrix[ids])
+        bootstrapped_zero_matrix_lst.append(zero_train_matrix[ids])
 
-        bootstrapped_train_matrix_lst.append(bootstrapped_train_matrix)
-        bootstrapped_zero_matrix_lst.append(bootstrapped_zero_matrix)
-
-    return bootstrapped_zero_matrix_lst, bootstrapped_train_matrix_lst, valid_data, test_data
+    return bootstrapped_zero_matrix_lst, bootstrapped_train_matrix_lst
 
 
 def evaluate_ensemble(model_lst, train_data, test_data):
@@ -85,26 +63,32 @@ def main():
     torch.manual_seed(0)
 
     # load the data
-    zero_train_matrix_lst, train_matrix_lst, valid_data, test_data = load_and_bootstrap()
-    zero_train_matrix, _, _, _ = load_data()
+    zero_train_matrix, train_matrix, valid_data, test_data = load_data()
+
+    # bootstrap
+    zero_train_matrix_lst, train_matrix_lst = bootstrap(zero_train_matrix, train_matrix)
 
     # set up the model and hyper-parameters
-    num_question = train_matrix_lst[0].shape[1]
-    k = 50
-    lr = 0.008  # regularization penalty
-    lamb = 0.01
-    num_epoch = 56
+    num_question = train_matrix.shape[1]
+
+    k_lst = [50, 50, 50]
+    lr_lst = [0.008, 0.008, 0.008]
+    lamb_lst = [0.001, 0.001, 0.001]
+    num_epoch_lst = [56, 56, 56]
 
     # train the models
-    models = [AutoEncoder(num_question, k) for _ in range(3)]
+    model_lst = [AutoEncoder(num_question, k) for k in k_lst]
     for i in range(3):
-        train(models[i], lr, lamb, train_matrix_lst[i], zero_train_matrix_lst[i], valid_data,
-              num_epoch)
+        print('-------------------------------------')
+        print(f'Model[{i}]')
+        train(model_lst[i], lr_lst[i], lamb_lst[i], train_matrix_lst[i], 
+              zero_train_matrix_lst[i], valid_data, num_epoch_lst[i])
 
     # evaluate on the test set using the ensemble method
-    test_acc = evaluate_ensemble(models, zero_train_matrix, test_data)
-    print("test_acc: ", test_acc)
-
+    val_acc = evaluate_ensemble(model_lst, zero_train_matrix, valid_data)
+    test_acc = evaluate_ensemble(model_lst, zero_train_matrix, test_data)
+    print(f'val_acc={val_acc}, test_acc={test_acc}')
+    
 
 if __name__ == "__main__":
     main()
