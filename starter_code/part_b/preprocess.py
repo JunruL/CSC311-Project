@@ -44,6 +44,8 @@ def get_student_meta():
     for i in range(len(student_data_raw["user_id"])):
         user_id = student_data_raw["user_id"][i]
         gender = student_data_raw["gender"][i]
+        if gender == 0:
+            gender = 1.5
         gender /= 2.0
         premium_pupil = student_data_raw["premium_pupil"]
         year = student_data_raw["date_of_birth"][i][0:4]
@@ -62,22 +64,83 @@ def get_student_vectors():
     student_data_raw = load_student_meta()
     gender_vector = np.zeros((542, 1))
     age_vector = np.zeros((542, 1))
+
+    # get mean age
+    age_total = 0
+    age_num = 0
+    for i in range(542):
+        year = student_data_raw["date_of_birth"][i][0:4]
+        if year != '':
+            age_total += 2022 - int(year)
+            age_num += 1
+    age_mean = int(age_total / age_num)
+
     for i in range(542):
         gender = student_data_raw["gender"][i]
+        # change the unknown gender to 1.5
+        if gender == 0:
+            gender = 1.5
+        # normalize the gender
         gender /= 2.0
+        
         premium_pupil = student_data_raw["premium_pupil"]
         year = student_data_raw["date_of_birth"][i][0:4]
         if year != '':
             age = 2022 - int(year)
         else:
-            age = 15
+            # replace mssing age with mean age
+            age = age_mean
+
+        # normalizr age    
         age /= 20.0
         
         gender_vector[i, 0] = gender
         age_vector[i, 0] = age
     
-    gender_vector = torch.FloatTensor(gender_vector)
-    age_vector = torch.FloatTensor(age_vector)
-    
     return gender_vector, age_vector
+    
 
+def load_subject_meta(root_dir="../data"):
+    path = os.path.join(root_dir, "subject_meta.csv")
+
+
+def load_question_meta(root_dir="../data"):
+    path = os.path.join(root_dir, "question_meta.csv")
+    if not os.path.exists(path):
+        raise Exception("The specified path {} does not exist.".format(path))
+
+    df = pd.read_csv(path)
+    df["subject_id"] = df["subject_id"].apply(lambda x: ast.literal_eval(x))
+
+    data = {
+        "question_id": list(df["question_id"]),
+        "subject_id": list(df["subject_id"]),
+    }
+
+    return data
+
+
+def get_question_meta(beta):
+    data = load_question_meta()
+    unique = list(set([l[1] for l in data["subject_id"]]))
+    subject_lst = [0 for _ in range(len(unique))]
+    id_lst = data["question_id"]
+    encoded_data = np.zeros(len(id_lst))
+    for i in range(len(id_lst)):
+        encoded_lst = subject_lst
+        for j in range(len(subject_lst)):
+            if data["subject_id"][i][1] == unique[j]:
+                question_id = id_lst[i]
+                encoded_data[question_id] = (j+1) * beta
+    return encoded_data
+
+
+def get_question_matrix():
+    data = load_question_meta()
+
+    q_matrix = np.zeros((388, 1774))
+    for i, q_id in enumerate(data["question_id"]):
+        for s_id in data["subject_id"]:
+            q_matrix[s_id, q_id] = 1
+    
+    return q_matrix
