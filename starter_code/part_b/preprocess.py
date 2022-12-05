@@ -76,5 +76,8 @@ def get_student_vectors():
         gender_vector[i, 0] = gender
         age_vector[i, 0] = age
     
+    gender_vector = torch.FloatTensor(gender_vector)
+    age_vector = torch.FloatTensor(age_vector)
+    
     return gender_vector, age_vector
 

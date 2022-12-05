@@ -183,9 +183,6 @@ def train(model, lr, lamb, gender_vector, age_vector, train_data, zero_train_dat
                                                               best_valid_acc))
         sys.stdout.flush()
     return best_valid_acc
-    #####################################################################
-    #                       END OF YOUR CODE                            #
-    #####################################################################
 
 
 def evaluate(model, gender_vector, age_vector, train_data, valid_data):
@@ -207,9 +204,8 @@ def evaluate(model, gender_vector, age_vector, train_data, valid_data):
     total = 0
     correct = 0
 
-    for i, u in enumerate(valid_data["question_id"]):
-        inputs = Variable(train_data[:, u]).unsqueeze(0).to(device=device)
-        # student_info = gender_vector.reshape(1, num_student).to(device=device)
+    for i, q in enumerate(valid_data["question_id"]):
+        inputs = Variable(train_data[:, q]).unsqueeze(0).to(device=device)
         output = model(inputs, gender_vector, age_vector)
 
         guess = output[0][valid_data["user_id"][i]].item() >= 0.5
@@ -220,46 +216,35 @@ def evaluate(model, gender_vector, age_vector, train_data, valid_data):
 
 
 def main():
-    print(f'nn10.py, same as nn7.py, but add gender/age info')
-
-    # read the beta value from the command line
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-lr", "--lr", type=float, help="learning rate")
-    args = parser.parse_args()
-    lr = args.lr
-    print(f'Tuning process for lr={lr}')
-
+    # set random seeds
     np.random.seed(0)
     torch.manual_seed(0)
 
+    # read the hyper-parameters from the command line
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-lr", "--lr", type=float, help="learning rate")
+    parser.add_argument("-lamb", "--lamb", type=float, help="lambda")
+    parser.add_argument("-num_epoch", "--num_epoch", type=int, help="number of epochs")
+    args = parser.parse_args()
+    lr = args.lr
+    lamb = args.lamb
+    num_epoch = args.num_epoch
+
+    num_student = train_matrix.shape[0]
+
+    # load data and students info vectors
     zero_train_matrix, train_matrix, valid_data, test_data = load_data()
     gender_vector, age_vector = get_student_vectors()
-    gender_vector = torch.FloatTensor(gender_vector)
-    age_vector = torch.FloatTensor(age_vector)
-    num_student = len(age_vector)
     device = (torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu'))
     gender_vector = gender_vector.reshape(1, num_student).to(device=device)
     age_vector = age_vector.reshape(1, num_student).to(device=device)
 
-    num_student = train_matrix.shape[0]
-
-    # lr_lst = [1e-5, 1e-4, 1e-3]
-    lamb_lst = [0.00001, 0.0001, 0.001]
-    num_epoch = 50
-    result_lst = []
-
-    for lamb in lamb_lst:
-        print('----------------------------------------------------------')
-        print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}')
-        model = AutoEncoder(num_student)
-        best_valid_acc = train(model, lr, lamb, gender_vector, age_vector, train_matrix, zero_train_matrix, valid_data, num_epoch)
-        test_acc = evaluate(model, gender_vector, age_vector, zero_train_matrix, test_data)
-        print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}, test_acc={test_acc}')
-        print('----------------------------------------------------------')
-        result_lst.append(f'lr={lr}, lamb={lamb}, best_valid_acc={best_valid_acc}')
-    
-    for result in result_lst:
-        print(result)
+    # train and test the model
+    print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}')
+    model = AutoEncoder(num_student)
+    best_valid_acc = train(model, lr, lamb, gender_vector, age_vector, train_matrix, zero_train_matrix, valid_data, num_epoch)
+    test_acc = evaluate(model, gender_vector, age_vector, zero_train_matrix, test_data)
+    print(f'lr={lr}, lamb={lamb}, num_epoch={num_epoch}, test_acc={test_acc}')
            
 
 if __name__ == "__main__":
