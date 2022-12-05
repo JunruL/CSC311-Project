@@ -1,8 +1,0 @@
-nn9.py, same as nn7.py, but add gender/age info
-Tuning process for lr=2e-05
-Traceback (most recent call last):
-  File "nn10.py", line 267, in <module>
-    main()
-  File "nn10.py", line 243, in main
-    student_info = torch.cat((gender, age), dim=1)
-NameError: name 'gender' is not defined

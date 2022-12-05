@@ -77,49 +77,4 @@ def get_student_vectors():
         age_vector[i, 0] = age
     
     return gender_vector, age_vector
-    
 
-def load_subject_meta(root_dir="../data"):
-    path = os.path.join(root_dir, "subject_meta.csv")
-
-
-def load_question_meta(root_dir="../data"):
-    path = os.path.join(root_dir, "question_meta.csv")
-    if not os.path.exists(path):
-        raise Exception("The specified path {} does not exist.".format(path))
-
-    df = pd.read_csv(path)
-    df["subject_id"] = df["subject_id"].apply(lambda x: ast.literal_eval(x))
-
-    data = {
-        "question_id": list(df["question_id"]),
-        "subject_id": list(df["subject_id"]),
-    }
-
-    return data
-
-
-def get_question_meta(beta):
-    data = load_question_meta()
-    unique = list(set([l[1] for l in data["subject_id"]]))
-    subject_lst = [0 for _ in range(len(unique))]
-    id_lst = data["question_id"]
-    encoded_data = np.zeros(len(id_lst))
-    for i in range(len(id_lst)):
-        encoded_lst = subject_lst
-        for j in range(len(subject_lst)):
-            if data["subject_id"][i][1] == unique[j]:
-                question_id = id_lst[i]
-                encoded_data[question_id] = (j+1) * beta
-    return encoded_data
-
-
-def get_question_matrix():
-    data = load_question_meta()
-
-    q_matrix = np.zeros((388, 1774))
-    for i, q_id in enumerate(data["question_id"]):
-        for s_id in data["subject_id"]:
-            q_matrix[s_id, q_id] = 1
-    
-    return q_matrix
