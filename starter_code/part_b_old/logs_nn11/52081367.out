@@ -1,0 +1,222 @@
+nn10.py, same as nn7.py, but add gender/age info
+Tuning process for lr=1e-05
+----------------------------------------------------------
+lr=1e-05, lamb=0, num_epoch=50
+Epoch: 1 	Training Cost: 13920.627475	 Valid Acc: 0.6052780129833475 	Best Valid Acc: 0.605278
+Epoch: 2 	Training Cost: 13141.445287	 Valid Acc: 0.6473327688399662 	Best Valid Acc: 0.647333
+Epoch: 3 	Training Cost: 12379.094247	 Valid Acc: 0.6610217329946373 	Best Valid Acc: 0.661022
+Epoch: 4 	Training Cost: 11946.431087	 Valid Acc: 0.6693480101608806 	Best Valid Acc: 0.669348
+Epoch: 5 	Training Cost: 11724.382411	 Valid Acc: 0.67499294383291 	Best Valid Acc: 0.674993
+Epoch: 6 	Training Cost: 11601.121471	 Valid Acc: 0.6779565340107254 	Best Valid Acc: 0.677957
+Epoch: 7 	Training Cost: 11525.928498	 Valid Acc: 0.6790855207451313 	Best Valid Acc: 0.679086
+Epoch: 8 	Training Cost: 11476.850146	 Valid Acc: 0.6817668642393452 	Best Valid Acc: 0.681767
+Epoch: 9 	Training Cost: 11443.152680	 Valid Acc: 0.6824724809483489 	Best Valid Acc: 0.682472
+Epoch: 10 	Training Cost: 11419.145424	 Valid Acc: 0.6826136042901496 	Best Valid Acc: 0.682614
+Epoch: 11 	Training Cost: 11401.352792	 Valid Acc: 0.682895850973751 	Best Valid Acc: 0.682896
+Epoch: 12 	Training Cost: 11387.901100	 Valid Acc: 0.682895850973751 	Best Valid Acc: 0.682896
+Epoch: 13 	Training Cost: 11377.218588	 Valid Acc: 0.682895850973751 	Best Valid Acc: 0.682896
+Epoch: 14 	Training Cost: 11368.660221	 Valid Acc: 0.682895850973751 	Best Valid Acc: 0.682896
+Epoch: 15 	Training Cost: 11361.543496	 Valid Acc: 0.682895850973751 	Best Valid Acc: 0.682896
+Epoch: 16 	Training Cost: 11355.433254	 Valid Acc: 0.6830369743155518 	Best Valid Acc: 0.683037
+Epoch: 17 	Training Cost: 11349.991826	 Valid Acc: 0.6821902342647473 	Best Valid Acc: 0.683037
+Epoch: 18 	Training Cost: 11345.007982	 Valid Acc: 0.6820491109229466 	Best Valid Acc: 0.683037
+Epoch: 19 	Training Cost: 11340.353492	 Valid Acc: 0.6826136042901496 	Best Valid Acc: 0.683037
+Epoch: 20 	Training Cost: 11335.884007	 Valid Acc: 0.6831780976573525 	Best Valid Acc: 0.683178
+Epoch: 21 	Training Cost: 11331.526032	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.683884
+Epoch: 22 	Training Cost: 11327.182602	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.683884
+Epoch: 23 	Training Cost: 11322.678601	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.683884
+Epoch: 24 	Training Cost: 11317.994188	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.683884
+Epoch: 25 	Training Cost: 11313.265271	 Valid Acc: 0.6837425910245555 	Best Valid Acc: 0.683884
+Epoch: 26 	Training Cost: 11308.396880	 Valid Acc: 0.6843070843917584 	Best Valid Acc: 0.684307
+Epoch: 27 	Training Cost: 11303.251144	 Valid Acc: 0.6843070843917584 	Best Valid Acc: 0.684307
+Epoch: 28 	Training Cost: 11297.627441	 Valid Acc: 0.6841659610499576 	Best Valid Acc: 0.684307
+Epoch: 29 	Training Cost: 11291.721318	 Valid Acc: 0.6841659610499576 	Best Valid Acc: 0.684307
+Epoch: 30 	Training Cost: 11285.506605	 Valid Acc: 0.6848715777589613 	Best Valid Acc: 0.684872
+Epoch: 31 	Training Cost: 11278.573334	 Valid Acc: 0.6851538244425628 	Best Valid Acc: 0.685154
+Epoch: 32 	Training Cost: 11270.986269	 Valid Acc: 0.6845893310753599 	Best Valid Acc: 0.685154
+Epoch: 33 	Training Cost: 11263.174503	 Valid Acc: 0.6851538244425628 	Best Valid Acc: 0.685154
+Epoch: 34 	Training Cost: 11254.800376	 Valid Acc: 0.6850127011007621 	Best Valid Acc: 0.685154
+Epoch: 35 	Training Cost: 11245.772634	 Valid Acc: 0.6847304544171606 	Best Valid Acc: 0.685154
+Epoch: 36 	Training Cost: 11236.025219	 Valid Acc: 0.6850127011007621 	Best Valid Acc: 0.685154
+Epoch: 37 	Training Cost: 11225.488016	 Valid Acc: 0.6854360711261642 	Best Valid Acc: 0.685436
+Epoch: 38 	Training Cost: 11214.060802	 Valid Acc: 0.6857183178097658 	Best Valid Acc: 0.685718
+Epoch: 39 	Training Cost: 11201.663560	 Valid Acc: 0.6854360711261642 	Best Valid Acc: 0.685718
+Epoch: 40 	Training Cost: 11188.205187	 Valid Acc: 0.6852949477843635 	Best Valid Acc: 0.685718
+Epoch: 41 	Training Cost: 11173.527106	 Valid Acc: 0.6852949477843635 	Best Valid Acc: 0.685718
+Epoch: 42 	Training Cost: 11157.639375	 Valid Acc: 0.6852949477843635 	Best Valid Acc: 0.685718
+Epoch: 43 	Training Cost: 11140.425721	 Valid Acc: 0.6858594411515665 	Best Valid Acc: 0.685859
+Epoch: 44 	Training Cost: 11121.801454	 Valid Acc: 0.6852949477843635 	Best Valid Acc: 0.685859
+Epoch: 45 	Training Cost: 11101.683435	 Valid Acc: 0.6858594411515665 	Best Valid Acc: 0.685859
+Epoch: 46 	Training Cost: 11080.036219	 Valid Acc: 0.6872706745695738 	Best Valid Acc: 0.687271
+Epoch: 47 	Training Cost: 11056.713320	 Valid Acc: 0.6871295512277731 	Best Valid Acc: 0.687271
+Epoch: 48 	Training Cost: 11031.632277	 Valid Acc: 0.6872706745695738 	Best Valid Acc: 0.687271
+Epoch: 49 	Training Cost: 11005.017380	 Valid Acc: 0.6871295512277731 	Best Valid Acc: 0.687271
+Epoch: 50 	Training Cost: 10976.841748	 Valid Acc: 0.6881174146203782 	Best Valid Acc: 0.688117
+lr=1e-05, lamb=0, num_epoch=50, test_acc=0.6788032740615297
+----------------------------------------------------------
+----------------------------------------------------------
+lr=1e-05, lamb=1e-05, num_epoch=50
+Epoch: 1 	Training Cost: 13950.974109	 Valid Acc: 0.6028789161727349 	Best Valid Acc: 0.602879
+Epoch: 2 	Training Cost: 13233.490630	 Valid Acc: 0.6418289585097375 	Best Valid Acc: 0.641829
+Epoch: 3 	Training Cost: 12436.902003	 Valid Acc: 0.6615862263618403 	Best Valid Acc: 0.661586
+Epoch: 4 	Training Cost: 11952.000020	 Valid Acc: 0.6727349703640982 	Best Valid Acc: 0.672735
+Epoch: 5 	Training Cost: 11712.587951	 Valid Acc: 0.6745695738075078 	Best Valid Acc: 0.674570
+Epoch: 6 	Training Cost: 11586.892142	 Valid Acc: 0.6748518204911093 	Best Valid Acc: 0.674852
+Epoch: 7 	Training Cost: 11512.513593	 Valid Acc: 0.6779565340107254 	Best Valid Acc: 0.677957
+Epoch: 8 	Training Cost: 11464.149887	 Valid Acc: 0.6785210273779283 	Best Valid Acc: 0.678521
+Epoch: 9 	Training Cost: 11431.201139	 Valid Acc: 0.68077900084674 	Best Valid Acc: 0.680779
+Epoch: 10 	Training Cost: 11408.046847	 Valid Acc: 0.6814846175557437 	Best Valid Acc: 0.681485
+Epoch: 11 	Training Cost: 11391.216099	 Valid Acc: 0.682895850973751 	Best Valid Acc: 0.682896
+Epoch: 12 	Training Cost: 11378.478332	 Valid Acc: 0.6824724809483489 	Best Valid Acc: 0.682896
+Epoch: 13 	Training Cost: 11368.524440	 Valid Acc: 0.683460344340954 	Best Valid Acc: 0.683460
+Epoch: 14 	Training Cost: 11360.363944	 Valid Acc: 0.683460344340954 	Best Valid Acc: 0.683460
+Epoch: 15 	Training Cost: 11353.409795	 Valid Acc: 0.6837425910245555 	Best Valid Acc: 0.683743
+Epoch: 16 	Training Cost: 11347.073711	 Valid Acc: 0.6836014676827548 	Best Valid Acc: 0.683743
+Epoch: 17 	Training Cost: 11341.122146	 Valid Acc: 0.6840248377081569 	Best Valid Acc: 0.684025
+Epoch: 18 	Training Cost: 11335.411948	 Valid Acc: 0.6848715777589613 	Best Valid Acc: 0.684872
+Epoch: 19 	Training Cost: 11329.653957	 Valid Acc: 0.6848715777589613 	Best Valid Acc: 0.684872
+Epoch: 20 	Training Cost: 11323.700871	 Valid Acc: 0.6851538244425628 	Best Valid Acc: 0.685154
+Epoch: 21 	Training Cost: 11317.468480	 Valid Acc: 0.6852949477843635 	Best Valid Acc: 0.685295
+Epoch: 22 	Training Cost: 11310.818260	 Valid Acc: 0.6850127011007621 	Best Valid Acc: 0.685295
+Epoch: 23 	Training Cost: 11303.606275	 Valid Acc: 0.6855771944679651 	Best Valid Acc: 0.685577
+Epoch: 24 	Training Cost: 11295.699875	 Valid Acc: 0.6854360711261642 	Best Valid Acc: 0.685577
+Epoch: 25 	Training Cost: 11286.974830	 Valid Acc: 0.6854360711261642 	Best Valid Acc: 0.685577
+Epoch: 26 	Training Cost: 11277.265058	 Valid Acc: 0.6855771944679651 	Best Valid Acc: 0.685577
+Epoch: 27 	Training Cost: 11266.384761	 Valid Acc: 0.6851538244425628 	Best Valid Acc: 0.685577
+Epoch: 28 	Training Cost: 11254.180865	 Valid Acc: 0.6852949477843635 	Best Valid Acc: 0.685577
+Epoch: 29 	Training Cost: 11240.463344	 Valid Acc: 0.6845893310753599 	Best Valid Acc: 0.685577
+Epoch: 30 	Training Cost: 11225.025890	 Valid Acc: 0.6852949477843635 	Best Valid Acc: 0.685577
+Epoch: 31 	Training Cost: 11207.493699	 Valid Acc: 0.6857183178097658 	Best Valid Acc: 0.685718
+Epoch: 32 	Training Cost: 11187.280014	 Valid Acc: 0.6860005644933672 	Best Valid Acc: 0.686001
+Epoch: 33 	Training Cost: 11165.135808	 Valid Acc: 0.6855771944679651 	Best Valid Acc: 0.686001
+Epoch: 34 	Training Cost: 11140.605420	 Valid Acc: 0.6862828111769687 	Best Valid Acc: 0.686283
+Epoch: 35 	Training Cost: 11113.523348	 Valid Acc: 0.6864239345187694 	Best Valid Acc: 0.686424
+Epoch: 36 	Training Cost: 11083.860159	 Valid Acc: 0.6868473045441716 	Best Valid Acc: 0.686847
+Epoch: 37 	Training Cost: 11051.564871	 Valid Acc: 0.6871295512277731 	Best Valid Acc: 0.687130
+Epoch: 38 	Training Cost: 11016.732487	 Valid Acc: 0.6892464013547841 	Best Valid Acc: 0.689246
+Epoch: 39 	Training Cost: 10979.531300	 Valid Acc: 0.6913632514817951 	Best Valid Acc: 0.691363
+Epoch: 40 	Training Cost: 10940.350511	 Valid Acc: 0.6926333615580017 	Best Valid Acc: 0.692633
+Epoch: 41 	Training Cost: 10899.333095	 Valid Acc: 0.692492238216201 	Best Valid Acc: 0.692633
+Epoch: 42 	Training Cost: 10857.015362	 Valid Acc: 0.6950324583686142 	Best Valid Acc: 0.695032
+Epoch: 43 	Training Cost: 10813.759963	 Valid Acc: 0.6965848151284222 	Best Valid Acc: 0.696585
+Epoch: 44 	Training Cost: 10770.065321	 Valid Acc: 0.6955969517358171 	Best Valid Acc: 0.696585
+Epoch: 45 	Training Cost: 10726.477983	 Valid Acc: 0.696725938470223 	Best Valid Acc: 0.696726
+Epoch: 46 	Training Cost: 10683.501598	 Valid Acc: 0.6978549252046289 	Best Valid Acc: 0.697855
+Epoch: 47 	Training Cost: 10641.572308	 Valid Acc: 0.6991250352808355 	Best Valid Acc: 0.699125
+Epoch: 48 	Training Cost: 10601.057055	 Valid Acc: 0.6998306519898391 	Best Valid Acc: 0.699831
+Epoch: 49 	Training Cost: 10562.241252	 Valid Acc: 0.7002540220152413 	Best Valid Acc: 0.700254
+Epoch: 50 	Training Cost: 10525.294959	 Valid Acc: 0.7006773920406435 	Best Valid Acc: 0.700677
+lr=1e-05, lamb=1e-05, num_epoch=50, test_acc=0.6900931414055885
+----------------------------------------------------------
+----------------------------------------------------------
+lr=1e-05, lamb=0.0001, num_epoch=50
+Epoch: 1 	Training Cost: 13995.895674	 Valid Acc: 0.5989274626023144 	Best Valid Acc: 0.598927
+Epoch: 2 	Training Cost: 13225.081014	 Valid Acc: 0.6435224386113463 	Best Valid Acc: 0.643522
+Epoch: 3 	Training Cost: 12428.671199	 Valid Acc: 0.6604572396274344 	Best Valid Acc: 0.660457
+Epoch: 4 	Training Cost: 11960.256366	 Valid Acc: 0.6697713801862828 	Best Valid Acc: 0.669771
+Epoch: 5 	Training Cost: 11726.803278	 Valid Acc: 0.67499294383291 	Best Valid Acc: 0.674993
+Epoch: 6 	Training Cost: 11600.358201	 Valid Acc: 0.6793677674287327 	Best Valid Acc: 0.679368
+Epoch: 7 	Training Cost: 11524.126856	 Valid Acc: 0.6814846175557437 	Best Valid Acc: 0.681485
+Epoch: 8 	Training Cost: 11475.232264	 Valid Acc: 0.6812023708721423 	Best Valid Acc: 0.681485
+Epoch: 9 	Training Cost: 11442.995826	 Valid Acc: 0.6814846175557437 	Best Valid Acc: 0.681485
+Epoch: 10 	Training Cost: 11421.185344	 Valid Acc: 0.6824724809483489 	Best Valid Acc: 0.682472
+Epoch: 11 	Training Cost: 11405.957593	 Valid Acc: 0.6824724809483489 	Best Valid Acc: 0.682472
+Epoch: 12 	Training Cost: 11394.890820	 Valid Acc: 0.6833192209991532 	Best Valid Acc: 0.683319
+Epoch: 13 	Training Cost: 11386.513572	 Valid Acc: 0.6830369743155518 	Best Valid Acc: 0.683319
+Epoch: 14 	Training Cost: 11379.772020	 Valid Acc: 0.6830369743155518 	Best Valid Acc: 0.683319
+Epoch: 15 	Training Cost: 11374.085977	 Valid Acc: 0.682895850973751 	Best Valid Acc: 0.683319
+Epoch: 16 	Training Cost: 11369.091227	 Valid Acc: 0.6830369743155518 	Best Valid Acc: 0.683319
+Epoch: 17 	Training Cost: 11364.508881	 Valid Acc: 0.6830369743155518 	Best Valid Acc: 0.683319
+Epoch: 18 	Training Cost: 11360.164019	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.683884
+Epoch: 19 	Training Cost: 11355.915120	 Valid Acc: 0.6840248377081569 	Best Valid Acc: 0.684025
+Epoch: 20 	Training Cost: 11351.735688	 Valid Acc: 0.6836014676827548 	Best Valid Acc: 0.684025
+Epoch: 21 	Training Cost: 11347.414974	 Valid Acc: 0.6843070843917584 	Best Valid Acc: 0.684307
+Epoch: 22 	Training Cost: 11343.036678	 Valid Acc: 0.6841659610499576 	Best Valid Acc: 0.684307
+Epoch: 23 	Training Cost: 11338.446645	 Valid Acc: 0.6845893310753599 	Best Valid Acc: 0.684589
+Epoch: 24 	Training Cost: 11333.655663	 Valid Acc: 0.6848715777589613 	Best Valid Acc: 0.684872
+Epoch: 25 	Training Cost: 11328.569624	 Valid Acc: 0.6851538244425628 	Best Valid Acc: 0.685154
+Epoch: 26 	Training Cost: 11323.137967	 Valid Acc: 0.6847304544171606 	Best Valid Acc: 0.685154
+Epoch: 27 	Training Cost: 11317.300654	 Valid Acc: 0.6850127011007621 	Best Valid Acc: 0.685154
+Epoch: 28 	Training Cost: 11310.966240	 Valid Acc: 0.6843070843917584 	Best Valid Acc: 0.685154
+Epoch: 29 	Training Cost: 11304.180159	 Valid Acc: 0.6841659610499576 	Best Valid Acc: 0.685154
+Epoch: 30 	Training Cost: 11296.701261	 Valid Acc: 0.6845893310753599 	Best Valid Acc: 0.685154
+Epoch: 31 	Training Cost: 11288.486237	 Valid Acc: 0.6858594411515665 	Best Valid Acc: 0.685859
+Epoch: 32 	Training Cost: 11279.502235	 Valid Acc: 0.6857183178097658 	Best Valid Acc: 0.685859
+Epoch: 33 	Training Cost: 11269.598663	 Valid Acc: 0.6860005644933672 	Best Valid Acc: 0.686001
+Epoch: 34 	Training Cost: 11258.655683	 Valid Acc: 0.6860005644933672 	Best Valid Acc: 0.686001
+Epoch: 35 	Training Cost: 11246.548623	 Valid Acc: 0.6858594411515665 	Best Valid Acc: 0.686001
+Epoch: 36 	Training Cost: 11233.165251	 Valid Acc: 0.6857183178097658 	Best Valid Acc: 0.686001
+Epoch: 37 	Training Cost: 11218.315197	 Valid Acc: 0.6851538244425628 	Best Valid Acc: 0.686001
+Epoch: 38 	Training Cost: 11201.926377	 Valid Acc: 0.6847304544171606 	Best Valid Acc: 0.686001
+Epoch: 39 	Training Cost: 11183.856911	 Valid Acc: 0.6843070843917584 	Best Valid Acc: 0.686001
+Epoch: 40 	Training Cost: 11164.017387	 Valid Acc: 0.6844482077335591 	Best Valid Acc: 0.686001
+Epoch: 41 	Training Cost: 11142.052818	 Valid Acc: 0.6848715777589613 	Best Valid Acc: 0.686001
+Epoch: 42 	Training Cost: 11118.015669	 Valid Acc: 0.6855771944679651 	Best Valid Acc: 0.686001
+Epoch: 43 	Training Cost: 11091.780196	 Valid Acc: 0.6861416878351679 	Best Valid Acc: 0.686142
+Epoch: 44 	Training Cost: 11063.182618	 Valid Acc: 0.687694044594976 	Best Valid Acc: 0.687694
+Epoch: 45 	Training Cost: 11032.193628	 Valid Acc: 0.6881174146203782 	Best Valid Acc: 0.688117
+Epoch: 46 	Training Cost: 10998.860251	 Valid Acc: 0.6881174146203782 	Best Valid Acc: 0.688117
+Epoch: 47 	Training Cost: 10963.293669	 Valid Acc: 0.6891052780129834 	Best Valid Acc: 0.689105
+Epoch: 48 	Training Cost: 10925.813733	 Valid Acc: 0.6906576347727914 	Best Valid Acc: 0.690658
+Epoch: 49 	Training Cost: 10886.801842	 Valid Acc: 0.6934801016088061 	Best Valid Acc: 0.693480
+Epoch: 50 	Training Cost: 10846.746566	 Valid Acc: 0.6944679650014113 	Best Valid Acc: 0.694468
+lr=1e-05, lamb=0.0001, num_epoch=50, test_acc=0.6847304544171606
+----------------------------------------------------------
+----------------------------------------------------------
+lr=1e-05, lamb=0.001, num_epoch=50
+Epoch: 1 	Training Cost: 14205.919661	 Valid Acc: 0.6106406999717753 	Best Valid Acc: 0.610641
+Epoch: 2 	Training Cost: 13498.580426	 Valid Acc: 0.6380186282811177 	Best Valid Acc: 0.638019
+Epoch: 3 	Training Cost: 12684.689189	 Valid Acc: 0.6614451030200396 	Best Valid Acc: 0.661445
+Epoch: 4 	Training Cost: 12159.014323	 Valid Acc: 0.6713237369460909 	Best Valid Acc: 0.671324
+Epoch: 5 	Training Cost: 11890.200848	 Valid Acc: 0.6756985605419137 	Best Valid Acc: 0.675699
+Epoch: 6 	Training Cost: 11744.181837	 Valid Acc: 0.6790855207451313 	Best Valid Acc: 0.679086
+Epoch: 7 	Training Cost: 11654.187250	 Valid Acc: 0.6783799040361276 	Best Valid Acc: 0.679086
+Epoch: 8 	Training Cost: 11593.869276	 Valid Acc: 0.6790855207451313 	Best Valid Acc: 0.679086
+Epoch: 9 	Training Cost: 11553.399729	 Valid Acc: 0.6820491109229466 	Best Valid Acc: 0.682049
+Epoch: 10 	Training Cost: 11526.882410	 Valid Acc: 0.683460344340954 	Best Valid Acc: 0.683460
+Epoch: 11 	Training Cost: 11509.368066	 Valid Acc: 0.6820491109229466 	Best Valid Acc: 0.683460
+Epoch: 12 	Training Cost: 11497.356565	 Valid Acc: 0.6833192209991532 	Best Valid Acc: 0.683460
+Epoch: 13 	Training Cost: 11488.459494	 Valid Acc: 0.6833192209991532 	Best Valid Acc: 0.683460
+Epoch: 14 	Training Cost: 11481.568371	 Valid Acc: 0.6841659610499576 	Best Valid Acc: 0.684166
+Epoch: 15 	Training Cost: 11475.799404	 Valid Acc: 0.6837425910245555 	Best Valid Acc: 0.684166
+Epoch: 16 	Training Cost: 11470.686572	 Valid Acc: 0.6837425910245555 	Best Valid Acc: 0.684166
+Epoch: 17 	Training Cost: 11465.942368	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.684166
+Epoch: 18 	Training Cost: 11461.379857	 Valid Acc: 0.6841659610499576 	Best Valid Acc: 0.684166
+Epoch: 19 	Training Cost: 11456.848590	 Valid Acc: 0.6843070843917584 	Best Valid Acc: 0.684307
+Epoch: 20 	Training Cost: 11452.283961	 Valid Acc: 0.6847304544171606 	Best Valid Acc: 0.684730
+Epoch: 21 	Training Cost: 11447.495840	 Valid Acc: 0.6845893310753599 	Best Valid Acc: 0.684730
+Epoch: 22 	Training Cost: 11442.478684	 Valid Acc: 0.6852949477843635 	Best Valid Acc: 0.685295
+Epoch: 23 	Training Cost: 11437.192482	 Valid Acc: 0.6854360711261642 	Best Valid Acc: 0.685436
+Epoch: 24 	Training Cost: 11431.443538	 Valid Acc: 0.6848715777589613 	Best Valid Acc: 0.685436
+Epoch: 25 	Training Cost: 11425.182544	 Valid Acc: 0.6843070843917584 	Best Valid Acc: 0.685436
+Epoch: 26 	Training Cost: 11418.267893	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.685436
+Epoch: 27 	Training Cost: 11410.603054	 Valid Acc: 0.6830369743155518 	Best Valid Acc: 0.685436
+Epoch: 28 	Training Cost: 11402.063252	 Valid Acc: 0.6837425910245555 	Best Valid Acc: 0.685436
+Epoch: 29 	Training Cost: 11392.395839	 Valid Acc: 0.6836014676827548 	Best Valid Acc: 0.685436
+Epoch: 30 	Training Cost: 11381.528201	 Valid Acc: 0.6838837143663562 	Best Valid Acc: 0.685436
+Epoch: 31 	Training Cost: 11369.236393	 Valid Acc: 0.6843070843917584 	Best Valid Acc: 0.685436
+Epoch: 32 	Training Cost: 11355.371197	 Valid Acc: 0.6841659610499576 	Best Valid Acc: 0.685436
+Epoch: 33 	Training Cost: 11339.723383	 Valid Acc: 0.6844482077335591 	Best Valid Acc: 0.685436
+Epoch: 34 	Training Cost: 11322.126084	 Valid Acc: 0.6840248377081569 	Best Valid Acc: 0.685436
+Epoch: 35 	Training Cost: 11302.413888	 Valid Acc: 0.6857183178097658 	Best Valid Acc: 0.685718
+Epoch: 36 	Training Cost: 11280.544904	 Valid Acc: 0.6855771944679651 	Best Valid Acc: 0.685718
+Epoch: 37 	Training Cost: 11256.204451	 Valid Acc: 0.6861416878351679 	Best Valid Acc: 0.686142
+Epoch: 38 	Training Cost: 11229.468376	 Valid Acc: 0.6867061812023709 	Best Valid Acc: 0.686706
+Epoch: 39 	Training Cost: 11200.289888	 Valid Acc: 0.6886819079875811 	Best Valid Acc: 0.688682
+Epoch: 40 	Training Cost: 11168.760238	 Valid Acc: 0.6895286480383855 	Best Valid Acc: 0.689529
+Epoch: 41 	Training Cost: 11134.990377	 Valid Acc: 0.6900931414055885 	Best Valid Acc: 0.690093
+Epoch: 42 	Training Cost: 11099.075763	 Valid Acc: 0.6926333615580017 	Best Valid Acc: 0.692633
+Epoch: 43 	Training Cost: 11061.236988	 Valid Acc: 0.6939034716342083 	Best Valid Acc: 0.693903
+Epoch: 44 	Training Cost: 11021.853604	 Valid Acc: 0.6937623482924076 	Best Valid Acc: 0.693903
+Epoch: 45 	Training Cost: 10981.288638	 Valid Acc: 0.6939034716342083 	Best Valid Acc: 0.693903
+Epoch: 46 	Training Cost: 10940.073943	 Valid Acc: 0.6965848151284222 	Best Valid Acc: 0.696585
+Epoch: 47 	Training Cost: 10898.678216	 Valid Acc: 0.6964436917866215 	Best Valid Acc: 0.696585
+Epoch: 48 	Training Cost: 10857.557124	 Valid Acc: 0.6968670618120237 	Best Valid Acc: 0.696867
+Epoch: 49 	Training Cost: 10817.288107	 Valid Acc: 0.6991250352808355 	Best Valid Acc: 0.699125
+Epoch: 50 	Training Cost: 10778.283674	 Valid Acc: 0.7011007620660458 	Best Valid Acc: 0.701101
+lr=1e-05, lamb=0.001, num_epoch=50, test_acc=0.6923511148744003
+----------------------------------------------------------
+lr=1e-05, lamb=0, best_valid_acc=0.6881174146203782
+lr=1e-05, lamb=1e-05, best_valid_acc=0.7006773920406435
+lr=1e-05, lamb=0.0001, best_valid_acc=0.6944679650014113
+lr=1e-05, lamb=0.001, best_valid_acc=0.7011007620660458
